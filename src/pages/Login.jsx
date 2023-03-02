@@ -25,6 +25,12 @@ export default function Login() {
     }
   }
 
+  function saveLocalStorage() {
+    localStorage.setItem('user', JSON.stringify({
+      email: login.email,
+    }));
+  }
+
   return (
     <form action="">
       <label htmlFor="">
@@ -46,6 +52,7 @@ export default function Login() {
       <button
         data-testid="login-submit-btn"
         disabled={ buttonValid }
+        onClick={ saveLocalStorage }
       >
         Enter
       </button>
