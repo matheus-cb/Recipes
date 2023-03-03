@@ -40,6 +40,7 @@ export default function Login() {
   return (
     <form>
       <label htmlFor="email">
+        Email:
         <input
           type="email"
           id="email"
@@ -49,6 +50,7 @@ export default function Login() {
         />
       </label>
       <label htmlFor="password">
+        Senha:
         <input
           type="password"
           id="password"
