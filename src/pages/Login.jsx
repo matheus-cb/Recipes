@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 export default function Login() {
   const [login, setLogin] = useState({
@@ -7,6 +8,8 @@ export default function Login() {
   });
 
   const [buttonValid, setButtonValid] = useState(true);
+
+  const history = useHistory();
 
   function handleChange({ target: { name, value } }) {
     setLogin({
@@ -29,21 +32,26 @@ export default function Login() {
     localStorage.setItem('user', JSON.stringify({
       email: login.email,
     }));
+
+    // Redireciona a pessoa usuária para a pagina principal de receitas
+    history.push('/meals');
   }
 
   return (
-    <form action="">
-      <label htmlFor="">
+    <form>
+      <label htmlFor="email">
         <input
           type="email"
+          id="email"
           name="email"
           onChange={ handleChange }
           data-testid="email-input"
         />
       </label>
-      <label htmlFor="">
+      <label htmlFor="password">
         <input
           type="password"
+          id="password"
           name="password"
           onChange={ handleChange }
           data-testid="password-input"
