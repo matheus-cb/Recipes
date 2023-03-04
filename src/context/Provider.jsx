@@ -8,29 +8,32 @@ export default function Provider({ children }) {
   const [meals, setMeals] = useState([]);
   const [drinks, setDrinks] = useState([]);
 
-  const reSearch = (x) => {
+  const reSearch = (x) => { // funçao ainda pra ser implementanda com a Barra de busca do Header
     setSearch(x);
   };
 
-  function armazenaReceita() {
-    apiMeals(search)
-      .then((response) => setMeals(response));
-  }
+  const numerodoze = 12; // Numero referente a quantidade de itens que tem que aparecer na tela
 
-  useEffect(() => {
+  useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Meals
+    async function armazenaReceita() {
+      const guardaValorMeals = await apiMeals(search, numerodoze);
+      // console.log(guardaValorAPi);
+      setMeals(guardaValorMeals);
+    }
     armazenaReceita();
-  });
+  }, [search]);
 
-  function armazenaDrink() {
-    apiDrinks(search)
-      .then((response) => setDrinks(response));
-  }
-
-  useEffect(() => {
+  useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Drinks
+    async function armazenaDrink() {
+      // console.log(guardaValorAPi);
+      const guardaValorDrinks = await apiDrinks(search, numerodoze);
+      console.log(guardaValorDrinks);
+      setDrinks(guardaValorDrinks);
+    }
     armazenaDrink();
-  });
+  }, [search]);
 
-  const valuesProvider = useMemo(() => ({
+  const valuesProvider = useMemo(() => ({ // valores dos estados para serem passados aos filhos do Provider
     search,
     meals,
     drinks,

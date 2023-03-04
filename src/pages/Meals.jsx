@@ -5,12 +5,13 @@ import RecipesContext from '../context/RecipesContext';
 
 export default function Meals() {
   const { meals } = useContext(RecipesContext);
-  const numero = 12;
 
   return (
     <div>
       <Header title="Meals" searchOn />
-      <Recipes recipes={ meals.slice(0, numero) } />
+      <Recipes receitas={ meals } />
     </div>
   );
 }
+
+// O componente Recipes, recebe um Array Vazio, que e preenchido com o estado Meals, que contem os 12 Drinks para serem rederiza-los
