@@ -7,16 +7,16 @@ export default function Login() {
     password: '',
   });
 
-  const [buttonValid, setButtonValid] = useState(true);
+  const [buttonValid, setButtonValid] = useState(true); // Estado do botao para desativa-lo e ativa-lo
 
   const history = useHistory();
 
-  function handleChange({ target: { name, value } }) {
+  function handleChange({ target: { name, value } }) { // Realiza o controle do Input, fazendo a alteraçao do seu estado
     setLogin({
       ...login,
       [name]: value,
     });
-
+    // Valida o Email utilizando Regex, E se a senha tem mais de 6 caracteres
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(login.email);
     const num = 6;
     const minCharacter = login.password.length >= num;
@@ -28,7 +28,7 @@ export default function Login() {
     }
   }
 
-  function saveLocalStorage() {
+  function saveLocalStorage() { // Salve no local Storage o Email do usuario
     localStorage.setItem('user', JSON.stringify({
       email: login.email,
     }));
