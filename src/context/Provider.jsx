@@ -27,7 +27,7 @@ export default function Provider({ children }) {
     async function armazenaDrink() {
       // console.log(guardaValorAPi);
       const guardaValorDrinks = await apiDrinks(search, numerodoze);
-      console.log(guardaValorDrinks);
+      // console.log(guardaValorDrinks);
       setDrinks(guardaValorDrinks);
     }
     armazenaDrink();
