@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
+import Categories from '../components/Categories';
 import Header from '../components/Header';
 import Recipes from '../components/Recipes';
 import RecipesContext from '../context/RecipesContext';
 
 export default function Drinks() {
-  const { drinks } = useContext(RecipesContext);
+  const { drinks, drinksCategory } = useContext(RecipesContext);
   return (
     <div>
       <Header title="Drinks" searchOn />
+      <Categories categories={ drinksCategory } />
       <Recipes receitas={ drinks } />
     </div>
   );
