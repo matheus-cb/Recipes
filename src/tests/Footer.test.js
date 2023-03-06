@@ -4,13 +4,23 @@ import Footer from '../components/Footer';
 import renderWithRouter from '../renderWithRouter';
 
 describe('Componente Footer', () => {
-  test('Se os botões aparecem na tela', () => {
-    renderWithRouter(<Footer />);
-    
-    const drinkBtn = screen.getByTestId("drinks-bottom-btn");
-    const mealBtn = screen.getByTestId("meals-bottom-btn");
+  test('Se o botão Drinks leva para o local correto', () => {
+    const { history } = renderWithRouter(<Footer />);
 
-    expect(drinkBtn).toBeInTheDocument();
-    expect(mealBtn).toBeInTheDocument();
+    const drinkButton = screen.getByTestId('drinks-bottom-btn');
+    expect(drinkButton).toBeInTheDocument();
+    userEvent.click(drinkButton);
+    const { pathname } = history.location;
+    expect(pathname).toBe('/drinks');
+  });
+
+  test('Se o botão Meals leva para o local correto', () => {
+    const { history } = renderWithRouter(<Footer />);
+
+    const mealButton = screen.getByTestId('meals-bottom-btn');
+    expect(mealButton).toBeInTheDocument();
+    userEvent.click(mealButton);
+    const { pathname } = history.location;
+    expect(pathname).toBe('/meals');
   });
 });
