@@ -9,6 +9,7 @@ export default function Categories({ categories = [] }) {
         categories.map((category, index) => (
           <button
             key={ index }
+            data-testid={ `${category.strCategory}-category-filter` }
           >
             { category.strCategory }
           </button>
