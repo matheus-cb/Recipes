@@ -11,7 +11,7 @@ export default function Header({ title, searchOn }) {
   const handleClickSearchButton = () => {
     setIsInputVisible(!isInputVisible);
   };
-  // teste
+
   const iconeDePesquisa = () => (
     <button
       data-testid="search-top-btn"
