@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Recipes from '../components/Recipes';
 import RecipesContext from '../context/RecipesContext';
@@ -9,6 +10,7 @@ export default function Drinks() {
     <div>
       <Header title="Drinks" searchOn />
       <Recipes receitas={ drinks } />
+      <Footer />
     </div>
   );
 }
