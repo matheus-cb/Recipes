@@ -29,16 +29,16 @@ const apiDrinksCategory = async (numeroLimite) => { // Faz requisao da API das c
   return data.drinks.slice(0, numeroLimite);
 };
 
-const apiMealsFilter = async (category, numeroLimite) => { // Faz requisao da API por filtro das categorias de comida!
+const apiMealsFilter = async (category) => { // Faz requisao da API por filtro das categorias de comida!
   const response = await fetch(`${URL_FILTER_MEALS}${category}`);
   const data = await response.json();
-  return data.meals.slice(0, numeroLimite);
+  return data.meals;
 };
 
-const apiDrinksFilter = async (category, numeroLimite) => { // Faz requisao da API por filtro das categorias de bebida!
+const apiDrinksFilter = async (category) => { // Faz requisao da API por filtro das categorias de bebida!
   const response = await fetch(`${URL_FILTER_DRINKS}${category}`);
   const data = await response.json();
-  return data.drinks.slice(0, numeroLimite);
+  return data.drinks;
 };
 
 export {

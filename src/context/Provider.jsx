@@ -2,7 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import RecipesContext from './RecipesContext';
 import {
-  apiMeals, apiDrinks, apiDrinksCategory, apiMealsCategory, apiDrinksFilter,
+  apiMeals,
+  apiDrinks,
+  apiDrinksCategory,
+  apiMealsCategory,
+  apiDrinksFilter,
+  apiMealsFilter,
 } from '../services/APIdeReceitas';
 
 export default function Provider({ children }) {
@@ -22,7 +27,7 @@ export default function Provider({ children }) {
   useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Meals
     async function armazenaReceita() {
       const guardaValorMeals = await apiMeals(search, numerodoze);
-      console.log(guardaValorMeals);
+      // console.log(guardaValorMeals);
       setMeals(guardaValorMeals);
     }
     armazenaReceita();
@@ -42,8 +47,7 @@ export default function Provider({ children }) {
     async function filterCategory() {
       const categoryMeals = await apiMealsCategory(numerocinco);
       const categoryDrinks = await apiDrinksCategory(numerocinco);
-      // const filterMeals = await apiDrinksFilter(numerodoze);
-      // const filterDrinks = await apiDrinksFilter(numerodoze);
+
       // console.log(categoryMeals);
       // console.log(categoryDrinks);
       setMealsCategory(categoryMeals);
@@ -52,6 +56,16 @@ export default function Provider({ children }) {
     filterCategory();
   }, []);
 
+  async function apiMealsFiltered(category) {
+    const filterMeals = await apiMealsFilter(category);
+    setMeals(filterMeals);
+  }
+
+  async function apiDrinksFiltered(category) {
+    const filterDrinks = await apiDrinksFilter(category);
+    setDrinks(filterDrinks);
+  }
+
   const valuesProvider = useMemo(() => ({ // valores dos estados para serem passados aos filhos do Provider
     search,
     meals,
@@ -59,7 +73,16 @@ export default function Provider({ children }) {
     mealsCategory,
     drinksCategory,
     reSearch,
-  }), [meals, search, drinks, mealsCategory, drinksCategory]);
+    apiMealsFiltered,
+    apiDrinksFiltered,
+    armazenaReceita,
+  }), [
+    meals,
+    search,
+    drinks,
+    mealsCategory,
+    drinksCategory,
+  ]);
 
   return (
     <RecipesContext.Provider

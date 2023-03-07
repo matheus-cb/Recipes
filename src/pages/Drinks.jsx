@@ -5,11 +5,17 @@ import Recipes from '../components/Recipes';
 import RecipesContext from '../context/RecipesContext';
 
 export default function Drinks() {
-  const { drinks, drinksCategory } = useContext(RecipesContext);
+  const {
+    drinks, drinksCategory, apiDrinksFiltered, armazenaDrink,
+  } = useContext(RecipesContext);
   return (
     <div>
       <Header title="Drinks" searchOn />
-      <Categories categories={ drinksCategory } />
+      <Categories
+        categories={ drinksCategory }
+        func={ apiDrinksFiltered }
+        funcAll={ armazenaDrink }
+      />
       <Recipes receitas={ drinks } />
     </div>
   );
