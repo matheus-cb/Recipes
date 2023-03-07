@@ -1,12 +1,16 @@
 import React, { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import RecipesContext from '../context/RecipesContext';
 
 export default function SearchBar() {
   const { isInputVisible,
     setSearch,
     setType,
-    ApiByRadioButtons,
+    ApiMealsRadioButtons,
+    apiDrinksRadioButtons,
     type } = useContext(RecipesContext);
+
+  const location = useLocation().pathname;
 
   return (
     <div>
@@ -49,7 +53,7 @@ export default function SearchBar() {
       <button
         type="button"
         data-testid="exec-search-btn"
-        onClick={ ApiByRadioButtons }
+        onClick={ location === '/meals' ? ApiMealsRadioButtons : apiDrinksRadioButtons }
       >
         Search
       </button>

@@ -12,15 +12,19 @@ export default function Provider({ children }) {
 
   const numerodoze = 12; // Numero referente a quantidade de itens que tem que aparecer na tela
 
-  const ApiByRadioButtons = () => {
+  const urlIngredient = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${search}`;
+  const urlName = `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`;
+  const urlFirst = `https://www.themealdb.com/api/json/v1/1/search.php?f=${search}`;
+
+  const urlIngredientDrinks = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${search}`;
+  const urlNameDrinks = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${search}`;
+  const urlFirstDRinks = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${search}`;
+
+  const ApiMealsRadioButtons = () => {
     console.log(type);
     if (type === 'FirstLetter' && (search.length > 1 || search.length === 0)) {
       global.alert('Your search must have only 1 (one) character');
     }
-
-    const urlIngredient = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${search}`;
-    const urlName = `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`;
-    const urlFirst = `https://www.themealdb.com/api/json/v1/1/search.php?f=${search}`;
 
     const apiPreviewRadio = async (url, state, num) => {
       const response = await fetch(url);
@@ -38,6 +42,30 @@ export default function Provider({ children }) {
       break;
     default:
       apiPreviewRadio(urlFirst, setMeals, numerodoze);
+      break;
+    }
+  };
+
+  const apiDrinksRadioButtons = () => { // Para ser chamado no botao com condicional
+    if (type === 'FirstLetter' && (search.length > 1 || search.length === 0)) {
+      global.alert('Your search must have only 1 (one) character');
+    }
+    const apiPreviewRadioDrinks = async (url, state, num) => {
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data);
+      state(data.drinks.slice(0, num));
+    };
+
+    switch (type) {
+    case 'Ingredient':
+      apiPreviewRadioDrinks(urlIngredientDrinks, setDrinks, numerodoze);
+      break;
+    case 'Name':
+      apiPreviewRadioDrinks(urlNameDrinks, setDrinks, numerodoze);
+      break;
+    default:
+      apiPreviewRadioDrinks(urlFirstDRinks, setDrinks, numerodoze);
       break;
     }
   };
@@ -70,7 +98,8 @@ export default function Provider({ children }) {
     setType,
     isInputVisible,
     setIsInputVisible,
-    ApiByRadioButtons,
+    ApiMealsRadioButtons,
+    apiDrinksRadioButtons,
   }), [search, meals, drinks, type, isInputVisible]);
 
   return (

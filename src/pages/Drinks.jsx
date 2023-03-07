@@ -5,6 +5,7 @@ import RecipesContext from '../context/RecipesContext';
 
 export default function Drinks() {
   const { drinks } = useContext(RecipesContext);
+  console.log(drinks);
   return (
     <div>
       <Header title="Drinks" searchOn />
