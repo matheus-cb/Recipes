@@ -4,7 +4,6 @@ import Cards from './Cards';
 
 export default function Recipes({ receitas = [] }) { // Armazena o array que esta vindo do estado do Provider, Meals ou Drinks
   useEffect(() => {
-    // console.log(receitas);
   }, [receitas]);
   return (
     <div>

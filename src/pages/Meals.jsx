@@ -5,6 +5,7 @@ import RecipesContext from '../context/RecipesContext';
 
 export default function Meals() {
   const { meals } = useContext(RecipesContext);
+  console.log(meals);
 
   return (
     <div>
