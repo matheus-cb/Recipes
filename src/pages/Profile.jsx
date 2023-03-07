@@ -6,7 +6,7 @@ export default function Profile() {
   const [email, setEmail] = useState('');
 
   function getLocalStorage() {
-    const userLocalStorage = JSON.parse(localStorage.getItem('user'));
+    const userLocalStorage = JSON.parse(localStorage.getItem('user') || '{}');
     return userLocalStorage.email;
   }
 
