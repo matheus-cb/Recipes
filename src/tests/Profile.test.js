@@ -3,11 +3,12 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../renderWithRouter';
+import Profile from '../pages/Profile';
 
 describe('Testa o componente Profile', () => {
   it('Teste se o e-mail logado está renderizado na tela', () => {
     renderWithRouter(<App />);
-    const email = screen.getByTestId('email-input1');
+    const email = screen.getByTestId('email-input');
     const password = screen.getByTestId('password-input');
     const buttonLogin = screen.getByTestId('login-submit-btn');
 
@@ -22,8 +23,7 @@ describe('Testa o componente Profile', () => {
     const emailUser = screen.getByTestId('profile-email');
     expect(emailUser).toHaveTextContent('teste@trybe.com');
 
-    const email2 = screen.getByTestId('profile-email');
-    expect(email2).toBeInTheDocument();
+    expect(emailUser).toBeInTheDocument();
 
     const buttons = screen.getAllByRole('button');
     expect(buttons).toHaveLength(4);
@@ -36,24 +36,17 @@ describe('Testa o componente Profile', () => {
     expect(emailInput).toBeInTheDocument();
   });
 
-/*   it('Testa se não for digitado nenhum e-mail em login', () => {
-    renderWithRouter(<App />);
-    const email = screen.getByTestId('email-input');
-    const password = screen.getByTestId('password-input');
-    const buttonLogin = screen.getByTestId('login-submit-btn');
+  it('Testa se não for digitado nenhum e-mail em login', () => {
+    renderWithRouter(<Profile />);
 
-    userEvent.type(email, 'teste@email.com');
-    userEvent.type(password, '1478523');
-    userEvent.click(buttonLogin);
-
-    const buttonProfile = screen.getByTestId('profile-top-btn');
-
-    userEvent.click(buttonProfile);
+    localStorage.setItem('user', JSON.stringify({
+      email: 'teste@email.com',
+    }));
 
     const emailUser = screen.getByTestId('profile-email');
-    expect(emailUser).toHaveTextContent('teste@email.com');
+    // expect(emailUser).toHaveTextContent('teste@email.com');
 
     localStorage.removeItem('user');
     expect(emailUser).toEqual(null);
-  }); */
+  });
 });
