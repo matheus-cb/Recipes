@@ -1,23 +1,59 @@
-test('Teste genérico apenas para o profile passar, pois está falhando no covarege', () => {
-  expect(true).toBe(true);
-});
-
-/* import { screen } from '@testing-library/react';
-import Profile from '../pages/Profile';
+import React from 'react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import App from '../App';
 import renderWithRouter from '../renderWithRouter';
 
 describe('Testa o componente Profile', () => {
-  test('renderiza os componentes no Profile', () => {
-    renderWithRouter(<Profile />);
+  it('Teste se o e-mail logado está renderizado na tela', () => {
+    renderWithRouter(<App />);
+    const email = screen.getByTestId('email-input1');
+    const password = screen.getByTestId('password-input');
+    const buttonLogin = screen.getByTestId('login-submit-btn');
 
-    const email = screen.getByTestId('profile-email');
-    expect(email).toBeInTheDocument();
+    userEvent.type(email, 'teste@trybe.com');
+    userEvent.type(password, '1478523');
+    userEvent.click(buttonLogin);
+
+    const buttonProfile = screen.getByTestId('profile-top-btn');
+
+    userEvent.click(buttonProfile);
+
+    const emailUser = screen.getByTestId('profile-email');
+    expect(emailUser).toHaveTextContent('teste@trybe.com');
+
+    const email2 = screen.getByTestId('profile-email');
+    expect(email2).toBeInTheDocument();
 
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(3);
+    expect(buttons).toHaveLength(4);
+
+    const clearBtn = screen.getByTestId('profile-logout-btn');
+    userEvent.click(clearBtn);
+
+    const emailInput = screen.getByTestId('email-input');
+
+    expect(emailInput).toBeInTheDocument();
   });
 
-// Coverage está pedindo para testar linhas 15 a 19. Porém, preciso acessar o localStorage para fazer o teste que falta, e para acessar os dados, preciso iniciar em login. Teste implementado em App.test. Após isto, o teste passou a quebrar, pois então só teria contexto para o teste no App, pq fiz o caminho do login.
-//  });
+/*   it('Testa se não for digitado nenhum e-mail em login', () => {
+    renderWithRouter(<App />);
+    const email = screen.getByTestId('email-input');
+    const password = screen.getByTestId('password-input');
+    const buttonLogin = screen.getByTestId('login-submit-btn');
+
+    userEvent.type(email, 'teste@email.com');
+    userEvent.type(password, '1478523');
+    userEvent.click(buttonLogin);
+
+    const buttonProfile = screen.getByTestId('profile-top-btn');
+
+    userEvent.click(buttonProfile);
+
+    const emailUser = screen.getByTestId('profile-email');
+    expect(emailUser).toHaveTextContent('teste@email.com');
+
+    localStorage.removeItem('user');
+    expect(emailUser).toEqual(null);
+  }); */
 });
- */
