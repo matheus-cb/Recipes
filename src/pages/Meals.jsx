@@ -5,7 +5,9 @@ import Recipes from '../components/Recipes';
 import RecipesContext from '../context/RecipesContext';
 
 export default function Meals() {
-  const { meals, mealsCategory, apiMealsFiltered, armazenaReceita } = useContext(RecipesContext);
+  const {
+    meals, mealsCategory, apiMealsFiltered, allMeals,
+  } = useContext(RecipesContext);
 
   return (
     <div>
@@ -13,7 +15,7 @@ export default function Meals() {
       <Categories
         categories={ mealsCategory }
         func={ apiMealsFiltered }
-        funcAll={ armazenaReceita }
+        funcAll={ allMeals }
       />
       <Recipes receitas={ meals } />
     </div>

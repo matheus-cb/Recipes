@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import RecipesContext from './RecipesContext';
 import {
@@ -27,7 +27,7 @@ export default function Provider({ children }) {
   useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Meals
     async function armazenaReceita() {
       const guardaValorMeals = await apiMeals(search, numerodoze);
-      // console.log(guardaValorMeals);
+      console.log(guardaValorMeals);
       setMeals(guardaValorMeals);
     }
     armazenaReceita();
@@ -57,14 +57,24 @@ export default function Provider({ children }) {
   }, []);
 
   async function apiMealsFiltered(category) {
-    const filterMeals = await apiMealsFilter(category);
+    const filterMeals = await apiMealsFilter(category, numerodoze);
     setMeals(filterMeals);
   }
 
+  const allMeals = useCallback(async () => {
+    const guardaValorMeals = await apiMeals(search, numerodoze);
+    setMeals(guardaValorMeals);
+  }, [search, numerodoze]);
+
   async function apiDrinksFiltered(category) {
-    const filterDrinks = await apiDrinksFilter(category);
+    const filterDrinks = await apiDrinksFilter(category, numerodoze);
     setDrinks(filterDrinks);
   }
+
+  const allDrink = useCallback(async () => {
+    const guardaValorDrinks = await apiDrinks(search, numerodoze);
+    setDrinks(guardaValorDrinks);
+  }, [search, numerodoze]);
 
   const valuesProvider = useMemo(() => ({ // valores dos estados para serem passados aos filhos do Provider
     search,
@@ -75,13 +85,16 @@ export default function Provider({ children }) {
     reSearch,
     apiMealsFiltered,
     apiDrinksFiltered,
-    armazenaReceita,
+    allMeals,
+    allDrink,
   }), [
     meals,
     search,
     drinks,
     mealsCategory,
     drinksCategory,
+    allMeals,
+    allDrink,
   ]);
 
   return (
