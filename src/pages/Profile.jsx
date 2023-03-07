@@ -15,6 +15,10 @@ export default function Profile() {
     setEmail(emailUser);
   }, []);
 
+  function clearLocalStorage() {
+    localStorage.clear();
+  }
+
   return (
     <div>
       <Header title="Profile" searchOn={ false } />
@@ -42,6 +46,7 @@ export default function Profile() {
       <Link to="/">
         <button
           data-testid="profile-logout-btn"
+          onClick={ clearLocalStorage }
         >
           Logout
         </button>
