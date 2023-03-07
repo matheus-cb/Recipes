@@ -2,6 +2,8 @@ const URL_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const URL_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 const URL_CATEGORY_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
 const URL_CATEGORY_MEALS = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
+const URL_FILTER_MEALS = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
+const URL_FILTER_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=';
 
 const apiMeals = async (search, numeroLimite) => { // Faz requisao da API de apenas os pratos de comida!
   const response = await fetch(`${URL_MEALS}${search}`);
@@ -27,4 +29,23 @@ const apiDrinksCategory = async (numeroLimite) => { // Faz requisao da API das c
   return data.drinks.slice(0, numeroLimite);
 };
 
-export { apiMeals, apiDrinks, apiMealsCategory, apiDrinksCategory };
+const apiMealsFilter = async (category, numeroLimite) => { // Faz requisao da API por filtro das categorias de comida!
+  const response = await fetch(`${URL_FILTER_MEALS}${category}`);
+  const data = await response.json();
+  return data.meals.slice(0, numeroLimite);
+};
+
+const apiDrinksFilter = async (category, numeroLimite) => { // Faz requisao da API por filtro das categorias de bebida!
+  const response = await fetch(`${URL_FILTER_DRINKS}${category}`);
+  const data = await response.json();
+  return data.drinks.slice(0, numeroLimite);
+};
+
+export {
+  apiMeals,
+  apiDrinks,
+  apiMealsCategory,
+  apiDrinksCategory,
+  apiMealsFilter,
+  apiDrinksFilter,
+};

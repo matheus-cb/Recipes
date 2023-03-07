@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import RecipesContext from './RecipesContext';
 import {
-  apiMeals, apiDrinks, apiDrinksCategory, apiMealsCategory,
+  apiMeals, apiDrinks, apiDrinksCategory, apiMealsCategory, apiDrinksFilter,
 } from '../services/APIdeReceitas';
 
 export default function Provider({ children }) {
@@ -22,7 +22,7 @@ export default function Provider({ children }) {
   useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Meals
     async function armazenaReceita() {
       const guardaValorMeals = await apiMeals(search, numerodoze);
-      // console.log(guardaValorAPi);
+      console.log(guardaValorMeals);
       setMeals(guardaValorMeals);
     }
     armazenaReceita();
@@ -42,6 +42,8 @@ export default function Provider({ children }) {
     async function filterCategory() {
       const categoryMeals = await apiMealsCategory(numerocinco);
       const categoryDrinks = await apiDrinksCategory(numerocinco);
+      // const filterMeals = await apiDrinksFilter(numerodoze);
+      // const filterDrinks = await apiDrinksFilter(numerodoze);
       // console.log(categoryMeals);
       // console.log(categoryDrinks);
       setMealsCategory(categoryMeals);

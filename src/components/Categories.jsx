@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 
 export default function Categories({ categories = [] }) {
   // console.log(categories);
+  // function filterIten () {
+
+  // };
+
   return (
     <div>
       {
