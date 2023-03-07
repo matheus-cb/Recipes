@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 
 export default function Profile() {
@@ -24,21 +25,28 @@ export default function Profile() {
       >
         { email }
       </div>
-      <button
-        data-testid="profile-done-btn"
-      >
-        Done Recipes
-      </button>
-      <button
-        data-testid="profile-favorite-btn"
-      >
-        Favorite Recipes
-      </button>
-      <button
-        data-testid="profile-logout-btn"
-      >
-        Logout
-      </button>
+      <Link to="/done-recipes">
+        <button
+          data-testid="profile-done-btn"
+        >
+          Done Recipes
+        </button>
+      </Link>
+      <Link to="/favorite-recipes">
+        <button
+          data-testid="profile-favorite-btn"
+        >
+          Favorite Recipes
+        </button>
+      </Link>
+      <Link to="/">
+        <button
+          data-testid="profile-logout-btn"
+        >
+          Logout
+        </button>
+
+      </Link>
     </div>
   );
 }
