@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function Categories({ categories = [], func, funcAll }) {
-  // console.log(func);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  // selectedCategory é o estado que controla qual categoria está selecionada no momento
+
+  const handleCategoryClick = (category) => {
+    if (selectedCategory === category) {
+      // botão clicado pela segunda vez, limpar a seleção
+      setSelectedCategory('');
+      funcAll();
+    } else {
+      // botão clicado pela primeira vez, selecionar a categoria
+      setSelectedCategory(category);
+      func(category);
+    }
+  };
 
   return (
     <div>
       <button
         data-testid="All-category-filter"
-        onClick={ funcAll }
+        onClick={ () => funcAll() }
       >
         All
       </button>
@@ -17,7 +30,7 @@ export default function Categories({ categories = [], func, funcAll }) {
           <button
             key={ index }
             data-testid={ `${category.strCategory}-category-filter` }
-            onClick={ () => func(category.strCategory) }
+            onClick={ () => handleCategoryClick(category.strCategory) }
           >
             { category.strCategory }
           </button>
