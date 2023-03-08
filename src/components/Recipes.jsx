@@ -1,22 +1,32 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Cards from './Cards';
 
-export default function Recipes({ receitas = [] }) { // Armazena o array que esta vindo do estado do Provider, Meals ou Drinks
+export default function Recipes({ receitas = [], tipoReceita }) {
   useEffect(() => {
     // console.log(receitas);
   }, [receitas]);
+
+  const getPath = (receita) => {
+    if (tipoReceita === 'meals') {
+      return `/meals/${(receita.idMeal)}`;
+    } if (tipoReceita === 'drinks') {
+      return `/drinks/${(receita.idDrink)}`;
+    }
+  };
+
   return (
     <div>
-      { receitas.map((receita, index) => ( // Realiza um Map do Array que contem 12 itens, seja Meals ou Drinks
-        <Cards
-          key={ receita.idMeal || receita.idDrink } // Rederiza o Card do Alimento atraves do ID que vem da API
-          receitas={ receita } // O alimento em si
-          item={ index } // Referente ao index do Alimente
-        />
-
+      { receitas.map((receita, index) => (
+        <Link to={ getPath(receita) } key={ receita.idMeal || receita.idDrink }>
+          <Cards
+            key={ receita.idMeal || receita.idDrink }
+            receitas={ receita }
+            item={ index }
+          />
+        </Link>
       )) }
-
     </div>
   );
 }
@@ -26,4 +36,5 @@ Recipes.propTypes = {
     idMeal: PropTypes.string.isRequired,
     idDrink: PropTypes.string.isRequired,
   })).isRequired,
+  tipoReceita: PropTypes.string.isRequired,
 };

@@ -1,15 +1,23 @@
 import React, { useContext } from 'react';
+import Categories from '../components/Categories';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Recipes from '../components/Recipes';
 import RecipesContext from '../context/RecipesContext';
 
 export default function Drinks() {
-  const { drinks } = useContext(RecipesContext);
+  const {
+    drinks, drinksCategory, apiDrinksFiltered, allDrink,
+  } = useContext(RecipesContext);
   return (
     <div>
       <Header title="Drinks" searchOn />
-      <Recipes receitas={ drinks } />
+      <Categories
+        categories={ drinksCategory }
+        func={ apiDrinksFiltered }
+        funcAll={ allDrink }
+      />
+      <Recipes receitas={ drinks } tipoReceita="drinks" />
       <Footer />
     </div>
   );
