@@ -17,7 +17,7 @@ export default function Meals() {
         func={ apiMealsFiltered }
         funcAll={ allMeals }
       />
-      <Recipes receitas={ meals } />
+      <Recipes receitas={ meals } tipoReceita="meals" />
     </div>
   );
 }

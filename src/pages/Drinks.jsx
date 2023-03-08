@@ -16,7 +16,7 @@ export default function Drinks() {
         func={ apiDrinksFiltered }
         funcAll={ allDrink }
       />
-      <Recipes receitas={ drinks } />
+      <Recipes receitas={ drinks } tipoReceita="drinks" />
     </div>
   );
 }
