@@ -23,8 +23,16 @@ function App() {
           path="/meals/:id/in-progress"
           render={ (props) => <Meals { ...props } /> }
         /> */}
-          <Route exact path="/meals/:id" component={ RecipeDetails } />
-          <Route exact path="/drinks/:id" component={ RecipeDetails } />
+          <Route
+            exact
+            path="/meals/:id"
+            render={ (props) => <RecipeDetails { ...props } /> }
+          />
+          <Route
+            exact
+            path="/drinks/:id"
+            render={ (props) => <RecipeDetails { ...props } /> }
+          />
           {/* <Route path="/meals/:id-da-receita/in-progress" component={ MealsInProgress } />
           <Route
             path="/drinks/:id-da-receita/in-progress"
