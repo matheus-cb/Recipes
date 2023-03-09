@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Cards from './Cards';
 
-export default function Recipes({ receitas = [] }) { // Armazena o array que esta vindo do estado do Provider, Meals ou Drinks
+export default function Recipes({ receitas = [], tipoReceita }) {
   const location = useLocation().pathname;
   const history = useHistory();
 
   const numerodoze = 12;
 
   const [resultReceitas, setResultReceitas] = useState([]);
-
+ 
   useEffect(() => {
     if (!receitas) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
@@ -21,18 +22,26 @@ export default function Recipes({ receitas = [] }) { // Armazena o array que est
       setResultReceitas(receitas.slice(0, numerodoze));
     }
   }, [receitas]);
+
+  const getPath = (receita) => {
+    if (tipoReceita === 'meals') {
+      return `/meals/${(receita.idMeal)}`;
+    } if (tipoReceita === 'drinks') {
+      return `/drinks/${(receita.idDrink)}`;
+    }
+  };
+
   return (
     <div>
-      {
-        resultReceitas.map((receita, index) => ( // Realiza um Map do Array que contem 12 itens, seja Meals ou Drinks
+      { resultReceitas.map((receita, index) => (
+        <Link to={ getPath(receita) } key={ receita.idMeal || receita.idDrink }>
           <Cards
-            key={ receita.idMeal || receita.idDrink } // Rederiza o Card do Alimento atraves do ID que vem da API
-            receitas={ receita } // O alimento em si
-            item={ index } // Referente ao index do Alimente
+            key={ receita.idMeal || receita.idDrink }
+            receitas={ receita }
+            item={ index }
           />
-
-        ))
-      }
+        </Link>
+      )) }
 
     </div>
   );
@@ -43,4 +52,5 @@ Recipes.propTypes = {
     idMeal: PropTypes.string.isRequired,
     idDrink: PropTypes.string.isRequired,
   })).isRequired,
+  tipoReceita: PropTypes.string.isRequired,
 };
