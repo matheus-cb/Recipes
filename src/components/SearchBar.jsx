@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import RecipesContext from '../context/RecipesContext';
 
@@ -6,11 +6,89 @@ export default function SearchBar() {
   const { isInputVisible,
     setSearch,
     setType,
-    ApiMealsRadioButtons,
-    apiDrinksRadioButtons,
+    search,
+    setMeals,
+    setDrinks,
     type } = useContext(RecipesContext);
 
+  const [changeType, setchangeType] = useState('');
+
   const location = useLocation().pathname;
+  // const history = useHistory();
+
+  const urlIngredient = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${search}`;
+  const urlName = `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`;
+  const urlFirst = `https://www.themealdb.com/api/json/v1/1/search.php?f=${search}`;
+
+  const urlIngredientDrinks = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${search}`;
+  const urlNameDrinks = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${search}`;
+  const urlFirstDrinks = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${search}`;
+
+  const apiRadioButtons = async (url) => {
+    // console.log(location);
+    const response = await fetch(url);
+    // console.log(response);
+    const data = await response.json();
+    // console.log(data);
+    const mealsOrDrinks = data;
+
+    if (changeType === 'FirstLetter' && search.length !== 1) {
+      global.alert('Your search must have only 1 (one) character');
+    } // pode ser que falte um return aki
+    return mealsOrDrinks;
+  };
+
+  const radioButtonsMeals = async (button) => {
+    let salvaValorMeals = [];
+    switch (button) {
+    case 'Ingredient':
+      salvaValorMeals = await apiRadioButtons(urlIngredient);
+      console.log(salvaValorMeals);
+      setMeals(salvaValorMeals.meals);
+      break;
+    case 'Name':
+      salvaValorMeals = await apiRadioButtons(urlName);
+      console.log(salvaValorMeals);
+      setMeals(salvaValorMeals.meals);
+      break;
+    case 'FirstLetter':
+      salvaValorMeals = await apiRadioButtons(urlFirst);
+      console.log(salvaValorMeals);
+      setMeals(salvaValorMeals.meals);
+      break;
+    default:
+      console.log('default');
+      break;
+    }
+  };
+  const radioButtonsDrinks = async (button) => {
+    let salvaValorDrinks = [];
+    switch (button) {
+    case 'Ingredient':
+      salvaValorDrinks = await apiRadioButtons(urlIngredientDrinks);
+      setDrinks(salvaValorDrinks.drinks);
+      break;
+    case 'Name':
+      salvaValorDrinks = await apiRadioButtons(urlNameDrinks);
+      setDrinks(salvaValorDrinks.drinks);
+      break;
+    case 'FirstLetter':
+      salvaValorDrinks = await apiRadioButtons(urlFirstDrinks);
+      setDrinks(salvaValorDrinks.drinks);
+      break;
+    default:
+      console.log('default drinks');
+      break;
+    }
+  };
+
+  useEffect(() => {
+    if (location === '/meals') {
+      radioButtonsMeals(type);
+    } else {
+      radioButtonsDrinks(type);
+    }
+  }, [type]);
 
   return (
     <div>
@@ -30,30 +108,34 @@ export default function SearchBar() {
           type="radio"
           value="Ingredient"
           data-testid="ingredient-search-radio"
-          checked={ type === 'Ingredient' }
-          onChange={ ({ target: { value } }) => setType(value) }
+          checked={ changeType === 'Ingredient' }
+          onChange={ ({ target: { value } }) => setchangeType(value) }
         />
         Name
         <input
           type="radio"
           value="Name"
-          checked={ type === 'Name' }
-          onChange={ ({ target: { value } }) => setType(value) }
+          checked={ changeType === 'Name' }
+          onChange={ ({ target: { value } }) => setchangeType(value) }
           data-testid="name-search-radio"
         />
         First
         <input
           type="radio"
           value="FirstLetter"
-          checked={ type === 'FirstLetter' }
-          onChange={ ({ target: { value } }) => setType(value) }
+          checked={ changeType === 'FirstLetter' }
+          onChange={ ({ target: { value } }) => setchangeType(value) }
           data-testid="first-letter-search-radio"
         />
       </div>
       <button
         type="button"
         data-testid="exec-search-btn"
-        onClick={ location === '/meals' ? ApiMealsRadioButtons : apiDrinksRadioButtons }
+        onClick={ () => {
+          if (changeType === 'FirstLetter' && search.length !== 1) {
+            global.alert('Your search must have only 1 (one) character');
+          } else { setType(changeType); }
+        } }
       >
         Search
       </button>
