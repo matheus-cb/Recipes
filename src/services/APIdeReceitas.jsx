@@ -4,6 +4,8 @@ const URL_CATEGORY_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/list.ph
 const URL_CATEGORY_MEALS = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
 const URL_FILTER_MEALS = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
 const URL_FILTER_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=';
+const URL_MEAL_PER_ID = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
+const URL_DRINK_PER_ID = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
 
 const apiMeals = async (numeroLimite) => { // Faz requisao da API de apenas os pratos de comida!
   const response = await fetch(`${URL_MEALS}`);
@@ -41,6 +43,18 @@ const apiDrinksFilter = async (category, numeroLimite) => { // Faz requisao da A
   return data.drinks.slice(0, numeroLimite);
 };
 
+const apiMealPerId = async (id) => { // Faz requisao da API de prato por ID!
+  const response = await fetch(`${URL_MEAL_PER_ID}${id}`);
+  const data = await response.json();
+  return data;
+};
+
+const apiDrinkPerId = async (id) => { // Faz requisao da API de bebida por ID!
+  const response = await fetch(`${URL_DRINK_PER_ID}${id}`);
+  const data = await response.json();
+  return data;
+};
+
 export {
   apiMeals,
   apiDrinks,
@@ -48,4 +62,6 @@ export {
   apiDrinksCategory,
   apiMealsFilter,
   apiDrinksFilter,
+  apiMealPerId,
+  apiDrinkPerId,
 };
