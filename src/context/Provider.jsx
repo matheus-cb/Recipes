@@ -14,42 +14,20 @@ export default function Provider({ children }) {
   const [search, setSearch] = useState('');
   const [meals, setMeals] = useState([]);
   const [drinks, setDrinks] = useState([]);
+  const [isInputVisible, setIsInputVisible] = useState(false);
+  const [type, setType] = useState('');
+  const [apiResponseAll, setapiResponseAll] = useState([]);
   const [mealsCategory, setMealsCategory] = useState([]);
   const [drinksCategory, setDrinksCategory] = useState([]);
-
-  const reSearch = (x) => { // funçao ainda pra ser implementanda com a Barra de busca do Header
-    setSearch(x);
-  };
+  const [resultReceitas, setResultReceitas] = useState([]);
 
   const numerodoze = 12; // Numero referente a quantidade de itens que tem que aparecer na tela
   const numerocinco = 5; // Numero referente a quantidade de categorias que queremos da API
-
-  useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Meals
-    async function armazenaReceita() {
-      const guardaValorMeals = await apiMeals(search, numerodoze);
-      console.log(guardaValorMeals);
-      setMeals(guardaValorMeals);
-    }
-    armazenaReceita();
-  }, [search]);
-
-  useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Drinks
-    async function armazenaDrink() {
-      // console.log(guardaValorAPi);
-      const guardaValorDrinks = await apiDrinks(search, numerodoze);
-      // console.log(guardaValorDrinks);
-      setDrinks(guardaValorDrinks);
-    }
-    armazenaDrink();
-  }, [search]);
 
   useEffect(() => { // Armazena o resultado das API's no estado de mealsCategory e drinksCategory
     async function filterCategory() {
       const categoryMeals = await apiMealsCategory(numerocinco);
       const categoryDrinks = await apiDrinksCategory(numerocinco);
-
-      // console.log(categoryMeals);
-      // console.log(categoryDrinks);
       setMealsCategory(categoryMeals);
       setDrinksCategory(categoryDrinks);
     }
@@ -58,43 +36,63 @@ export default function Provider({ children }) {
 
   async function apiMealsFiltered(category) {
     const filterMeals = await apiMealsFilter(category, numerodoze);
-    setMeals(filterMeals);
+    setResultReceitas(filterMeals);
   }
 
   const allMeals = useCallback(async () => {
-    const guardaValorMeals = await apiMeals(search, numerodoze);
-    setMeals(guardaValorMeals);
-  }, [search, numerodoze]);
+    const guardaValorMeals = await apiMeals(numerodoze);
+    setResultReceitas(guardaValorMeals);
+  }, [numerodoze]);
 
   async function apiDrinksFiltered(category) {
     const filterDrinks = await apiDrinksFilter(category, numerodoze);
-    setDrinks(filterDrinks);
+    setResultReceitas(filterDrinks);
   }
 
   const allDrink = useCallback(async () => {
-    const guardaValorDrinks = await apiDrinks(search, numerodoze);
-    setDrinks(guardaValorDrinks);
-  }, [search, numerodoze]);
+    const guardaValorDrinks = await apiDrinks(numerodoze);
+    setResultReceitas(guardaValorDrinks);
+  }, [numerodoze]);
 
   const valuesProvider = useMemo(() => ({ // valores dos estados para serem passados aos filhos do Provider
     search,
     meals,
     drinks,
+    setMeals,
+    setDrinks,
+    apiResponseAll,
+    setapiResponseAll,
+    isInputVisible,
+    setIsInputVisible,
+    type,
+    setType,
+    setSearch,
     mealsCategory,
     drinksCategory,
-    reSearch,
     apiMealsFiltered,
     apiDrinksFiltered,
     allMeals,
     allDrink,
+    resultReceitas,
+    setResultReceitas,
   }), [
-    meals,
     search,
+    meals,
     drinks,
+    setMeals,
+    setDrinks,
+    apiResponseAll,
+    setapiResponseAll,
+    isInputVisible,
+    setIsInputVisible,
+    type,
+    setType,
+    setSearch,
     mealsCategory,
     drinksCategory,
     allMeals,
     allDrink,
+    resultReceitas,
   ]);
 
   return (

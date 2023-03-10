@@ -8,11 +8,9 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM
   .createRoot(document.getElementById('root'))
   .render(
-
     <BrowserRouter>
       <App />
     </BrowserRouter>,
-
   );
 
 serviceWorker.unregister();

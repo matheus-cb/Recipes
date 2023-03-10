@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ProfileIcon from '../images/profileIcon.svg';
 import SearchIcon from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
+import RecipesContext from '../context/RecipesContext';
 
 export default function Header({ title, searchOn }) {
-  const [isInputVisible, setIsInputVisible] = useState(false);
+  const { isInputVisible, setIsInputVisible } = useContext(RecipesContext);
   const history = useHistory();
 
   const handleClickSearchButton = () => {
@@ -41,16 +43,7 @@ export default function Header({ title, searchOn }) {
       </button>
 
       <hr />
-
-      {
-        isInputVisible ? (
-          <input
-            type="text"
-            data-testid="search-input"
-            placeholder="Digite sua pesquisa"
-          />
-        ) : ''
-      }
+      <SearchBar />
     </header>
   );
 }

@@ -1,14 +1,24 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Categories from '../components/Categories';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Recipes from '../components/Recipes';
 import RecipesContext from '../context/RecipesContext';
+import { apiMeals } from '../services/APIdeReceitas';
 
 export default function Meals() {
   const {
-    meals, mealsCategory, apiMealsFiltered, allMeals,
+    meals, mealsCategory, setMeals, apiMealsFiltered, allMeals,
   } = useContext(RecipesContext);
+  const numerodoze = 12;
+
+  useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Meals
+    async function armazenaReceita() {
+      const guardaValorMeals = await apiMeals(numerodoze);
+      setMeals(guardaValorMeals);
+    }
+    armazenaReceita();
+  }, [setMeals]);
 
   return (
     <div>
