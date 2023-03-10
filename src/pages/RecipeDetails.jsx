@@ -19,10 +19,13 @@ export default function RecipeDetails(props) {
 
   const getIngredients = (obj) => { // Monta a lista com os Ingredientes
     const chaves = Object.entries(obj);
+    console.log(chaves);
     const allIngredients = chaves.filter((element) => element[0].includes('Ingredient')
-      && (element[1] !== (null || '')));
+      && ((element[1] !== '') && (element[1] !== null)));
     const allMeasures = chaves.filter((element) => element[0].includes('Measure')
-      && (element[1] !== (null || ' ')));
+      && ((element[1] !== '') && (element[1] !== null)));
+    console.log(allIngredients);
+    console.log(allMeasures);
     for (let index = 0; index < allIngredients.length; index += 1) {
       allIngredients[index].push(allMeasures[index][1]);
       allIngredients[index].push(index);
