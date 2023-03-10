@@ -7,18 +7,18 @@ import RecipesContext from '../context/RecipesContext';
 import { apiDrinks } from '../services/APIdeReceitas';
 
 export default function Drinks() {
-  const { drinks, setDrinks, drinksCategory, apiDrinksFiltered, allDrink,} = useContext(RecipesContext);
+  const {
+    drinks, setDrinks, drinksCategory, apiDrinksFiltered, allDrink,
+  } = useContext(RecipesContext);
   const numerodoze = 12;
 
   useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Drinks
     async function armazenaDrink() {
-      // console.log(guardaValorAPi);
       const guardaValorDrinks = await apiDrinks(numerodoze);
-      // console.log(guardaValorDrinks);
       setDrinks(guardaValorDrinks);
     }
     armazenaDrink();
-  }, []);
+  }, [setDrinks]);
 
   return (
     <div>

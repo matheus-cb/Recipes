@@ -7,17 +7,18 @@ import RecipesContext from '../context/RecipesContext';
 import { apiMeals } from '../services/APIdeReceitas';
 
 export default function Meals() {
-  const { meals, mealsCategory, setMeals, apiMealsFiltered, allMeals,} = useContext(RecipesContext);
+  const {
+    meals, mealsCategory, setMeals, apiMealsFiltered, allMeals,
+  } = useContext(RecipesContext);
   const numerodoze = 12;
 
   useEffect(() => { // recebe o resultado a API referente, e armazena o Array no estado de Meals
     async function armazenaReceita() {
       const guardaValorMeals = await apiMeals(numerodoze);
-      // console.log(guardaValorAPi);
       setMeals(guardaValorMeals);
     }
     armazenaReceita();
-  }, []);
+  }, [setMeals]);
 
   return (
     <div>

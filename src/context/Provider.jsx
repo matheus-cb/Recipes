@@ -1,4 +1,3 @@
-
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import RecipesContext from './RecipesContext';
@@ -20,6 +19,7 @@ export default function Provider({ children }) {
   const [apiResponseAll, setapiResponseAll] = useState([]);
   const [mealsCategory, setMealsCategory] = useState([]);
   const [drinksCategory, setDrinksCategory] = useState([]);
+  const [resultReceitas, setResultReceitas] = useState([]);
 
   const numerodoze = 12; // Numero referente a quantidade de itens que tem que aparecer na tela
   const numerocinco = 5; // Numero referente a quantidade de categorias que queremos da API
@@ -28,9 +28,6 @@ export default function Provider({ children }) {
     async function filterCategory() {
       const categoryMeals = await apiMealsCategory(numerocinco);
       const categoryDrinks = await apiDrinksCategory(numerocinco);
-
-      // console.log(categoryMeals);
-      // console.log(categoryDrinks);
       setMealsCategory(categoryMeals);
       setDrinksCategory(categoryDrinks);
     }
@@ -39,23 +36,23 @@ export default function Provider({ children }) {
 
   async function apiMealsFiltered(category) {
     const filterMeals = await apiMealsFilter(category, numerodoze);
-    setMeals(filterMeals);
+    setResultReceitas(filterMeals);
   }
 
   const allMeals = useCallback(async () => {
-    const guardaValorMeals = await apiMeals(search, numerodoze);
-    setMeals(guardaValorMeals);
-  }, [search, numerodoze]);
+    const guardaValorMeals = await apiMeals(numerodoze);
+    setResultReceitas(guardaValorMeals);
+  }, [numerodoze]);
 
   async function apiDrinksFiltered(category) {
     const filterDrinks = await apiDrinksFilter(category, numerodoze);
-    setDrinks(filterDrinks);
+    setResultReceitas(filterDrinks);
   }
 
   const allDrink = useCallback(async () => {
-    const guardaValorDrinks = await apiDrinks(search, numerodoze);
-    setDrinks(guardaValorDrinks);
-  }, [search, numerodoze]);
+    const guardaValorDrinks = await apiDrinks(numerodoze);
+    setResultReceitas(guardaValorDrinks);
+  }, [numerodoze]);
 
   const valuesProvider = useMemo(() => ({ // valores dos estados para serem passados aos filhos do Provider
     search,
@@ -76,16 +73,26 @@ export default function Provider({ children }) {
     apiDrinksFiltered,
     allMeals,
     allDrink,
+    resultReceitas,
+    setResultReceitas,
   }), [
-    type, 
-    isInputVisible,
-    meals,
     search,
+    meals,
     drinks,
+    setMeals,
+    setDrinks,
+    apiResponseAll,
+    setapiResponseAll,
+    isInputVisible,
+    setIsInputVisible,
+    type,
+    setType,
+    setSearch,
     mealsCategory,
     drinksCategory,
     allMeals,
     allDrink,
+    resultReceitas,
   ]);
 
   return (

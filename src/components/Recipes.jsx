@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation, useHistory } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useLocation, useHistory, Link } from 'react-router-dom';
 import Cards from './Cards';
+import RecipesContext from '../context/RecipesContext';
 
 export default function Recipes({ receitas = [], tipoReceita }) {
   const location = useLocation().pathname;
@@ -10,8 +10,8 @@ export default function Recipes({ receitas = [], tipoReceita }) {
 
   const numerodoze = 12;
 
-  const [resultReceitas, setResultReceitas] = useState([]);
- 
+  const { resultReceitas, setResultReceitas } = useContext(RecipesContext);
+
   useEffect(() => {
     if (!receitas) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
@@ -21,7 +21,7 @@ export default function Recipes({ receitas = [], tipoReceita }) {
     } else {
       setResultReceitas(receitas.slice(0, numerodoze));
     }
-  }, [receitas]);
+  }, [receitas, setResultReceitas, history, location]);
 
   const getPath = (receita) => {
     if (tipoReceita === 'meals') {
