@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { apiDrinkPerId, apiMealPerId } from '../services/APIdeReceitas';
 
 export default function RecipeDetails(props) {
   const {
-    match: { params: { id },
-    } } = props;
+    match: {
+      params: { id },
+      url,
+    },
+  } = props;
 
+  const [card, setCard] = useState({});
+
+  useEffect(() => {
+    async function getMeal() {
+      const meal = await apiMealPerId(id);
+      setCard(meal);
+    }
+    async function getDrink() {
+      const drink = await apiDrinkPerId(id);
+      setCard(drink);
+    }
+    if (url.includes('meal')) getMeal();
+    if (url.includes('drink')) getDrink();
+  }, [id, url]);
+
+  console.log(card);
   return (
     <div>
       ReipeDetails
@@ -19,5 +39,6 @@ RecipeDetails.propTypes = {
     params: PropTypes.shape({
       id: PropTypes.string,
     }),
+    url: PropTypes.string,
   }).isRequired,
 };
