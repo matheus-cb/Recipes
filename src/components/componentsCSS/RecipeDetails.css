@@ -1,7 +1,7 @@
 .buttonRecipe {
   bottom: 0;
-  position: fixed;
   color: red;
   margin-left: 20%;
+  position: fixed;
   width: 50%;
 }
