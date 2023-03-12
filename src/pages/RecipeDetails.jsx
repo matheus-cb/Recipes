@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation, useHistory } from 'react-router-dom';
 import { apiDrinkPerId, apiMealPerId } from '../services/APIdeReceitas';
+import blackHeart from '../images/blackHeartIcon.svg';
+import whiteHeart from '../images/whiteHeartIcon.svg';
+import '../components/componentsCSS/RecipeDetails.css';
 
 export default function RecipeDetails(props) {
   const {
@@ -10,12 +14,35 @@ export default function RecipeDetails(props) {
     },
   } = props; // Recenbendo ID e o URL
 
+  const [linkcopy, setLinkcopy] = useState(false);
+  const [favorited, setFavorited] = useState(false);
   const [photo, setPhoto] = useState(''); // Estado Local para as Infos da Page
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [instruction, setInstruction] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [linkYT, setLink] = useState('');
+  console.log(favorited);
+
+  const history = useHistory();
+  const { pathname } = useLocation();
+
+  const linkCopied = () => {
+    setLinkcopy(true);
+    navigator.clipboard.writeText(`http://localhost:3000${pathname}`);
+  };
+
+  const startRecipe = () => {
+    history.push(`${pathname}/in-progress`);
+  };
+
+  const favorite = () => {
+    if (favorited === false) {
+      setFavorited(true);
+    } else {
+      setFavorited(false);
+    }
+  };
 
   const getIngredients = (obj) => { // Monta a lista com os Ingredientes
     const chaves = Object.entries(obj);
@@ -108,6 +135,27 @@ export default function RecipeDetails(props) {
       >
         { category }
       </h2>
+      <button
+        data-testid="share-btn"
+        onClick={ linkCopied }
+      >
+        Compartilhar
+      </button>
+      { linkcopy === true ? <p>Link copied!</p> : ''}
+      <button
+        data-testid="favorite-btn"
+        onClick={ favorite }
+        src={
+          favorited ? blackHeart : whiteHeart
+        }
+      >
+        <img
+          src={
+            favorited ? blackHeart : whiteHeart
+          }
+          alt="Botao favoritar"
+        />
+      </button>
       <p
         data-testid="instructions"
       >
@@ -125,6 +173,15 @@ export default function RecipeDetails(props) {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;
         picture-in-picture; web-share"
       />
+      <div>
+        <button
+          data-testid="start-recipe-btn"
+          className="buttonRecipe"
+          onClick={ startRecipe }
+        >
+          Start Recipe
+        </button>
+      </div>
     </div>
   );
 }
