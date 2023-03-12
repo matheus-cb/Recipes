@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   apiDrinkPerId, apiMealPerId, apiDrinks, apiMeals,
 } from '../services/APIdeReceitas';
+import Recommendations from '../components/Recommendations';
 // import Recommendation from '../components/Recommendations';
 
 export default function RecipeDetails(props) {
@@ -19,17 +20,18 @@ export default function RecipeDetails(props) {
   const [instruction, setInstruction] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [linkYT, setLink] = useState('');
-  const [recommendations, setRecommendations] = useState([]); // Estado para gurdar o valor de recomendação
+  // Estado para gurdar o valor de recomendação e é passado como props para o componente Recommendations
+  const [recommendations, setRecommendations] = useState([]);
 
   const getIngredients = (obj) => { // Monta a lista com os Ingredientes
     const chaves = Object.entries(obj);
-    console.log(chaves);
+    // console.log(chaves);
     const allIngredients = chaves.filter((element) => element[0].includes('Ingredient')
       && ((element[1] !== '') && (element[1] !== null)));
     const allMeasures = chaves.filter((element) => element[0].includes('Measure')
       && ((element[1] !== '') && (element[1] !== null)));
-    console.log(allIngredients);
-    console.log(allMeasures);
+    // console.log(allIngredients);
+    // console.log(allMeasures);
     for (let index = 0; index < allIngredients.length; index += 1) {
       allIngredients[index].push(allMeasures[index][1]);
       allIngredients[index].push(index);
@@ -82,13 +84,23 @@ export default function RecipeDetails(props) {
       setRecommendations(recomendationMeals.slice(0, numSeis));
     }
     async function recommendationsDrinks() { // cahama a API do meals, para ultilizar como recomendação
-      const recomendationMeals = await apiDrinks(numeroDoze);
-      setRecommendations(recomendationMeals.slice(0, numSeis));
+      const recomendationDrinks = await apiDrinks(numeroDoze);
+      setRecommendations(recomendationDrinks.slice(0, numSeis));
     }
-    if (url.includes('meal')) getMeal(); recommendationsDrinks();
-    if (url.includes('drink')) getDrink(); recommendationsMeals();
-    console.log(recommendations);
-  }, [id, url, recommendations]);
+
+    if (url.includes('meal')) {
+      getMeal();
+      recommendationsDrinks();
+    }
+
+    if (url.includes('drink')) {
+      getDrink();
+      recommendationsMeals();
+    }
+  }, [id, url]);
+  console.log('RecipeDetails', url);
+  console.log('RecipeDetails', id);
+  console.log('RecipeDetails', recommendations);
 
   const ingredientsList = ingredients.map((ingredient) => { // Monta a lista de Ingredientes
     const ingNum = ingredient[0];
@@ -142,7 +154,7 @@ export default function RecipeDetails(props) {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;
         picture-in-picture; web-share"
       />
-      {/* <Recommendation type={ url.includes('meals') ? 'drinks' : 'meals' } /> */}
+      <Recommendations recommendations={ recommendations } />
     </div>
   );
 }

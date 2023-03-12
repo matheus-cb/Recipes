@@ -1,43 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  apiMeals, apiDrinks,
-} from '../services/APIdeReceitas';
 import RecommendationCard from './RecommendationCard';
-// import Carousel from '../styles';
-export default function Recommendations({ type }) {
-  const [recommendations, setRecommendations] = useState([]);
+import '../styles/Recommendations.css';
 
-  useEffect(() => {
-    const numSeis = 6;
-    async function fetchRecommendations() {
-      const response = type === 'meal'
-        ? await apiMeals()
-        : await apiDrinks();
-      // console.log('fetchRecommendations', response);
-      setRecommendations(response.slice(0, numSeis)); // exibe apenas 6 recomendações
-    }
-    fetchRecommendations();
-  }, [type]);
-
+export default function Recommendations({ recommendations }) {
   return (
-    <div>
-      <h2>Recomendações</h2>
-      <div className="carousel">
+    <div className="carousel-container">
+      <div className="carousel-wrapper">
         {recommendations.map((recommendation, index) => (
-          <RecommendationCard
-            key={ recommendation.idMeal || recommendation.idDrink }
-            title={ recommendation.strMeal || recommendation.strDrink }
-            thumb={ recommendation.strMealThumb || recommendation.strDrinkThumb }
-            testIdCard={ `${index}-recommendation-card` }
-            testIdTitle={ `${index}-recommendation-card` }
-            className="carousel_item"
-          />
+          <div className="carousel-item" key={ index }>
+            <RecommendationCard
+              title={ recommendation.strMeal || recommendation.strDrink }
+              thumb={ recommendation.strMealThumb || recommendation.strDrinkThumb }
+              testIdCard={ `${index}-recommendation-card` }
+              testIdTitle={ `${index}-recommendation-title` }
+            />
+          </div>
         ))}
       </div>
     </div>
   );
 }
+
 Recommendations.propTypes = {
-  type: PropTypes.oneOf(['meal', 'drink']).isRequired,
+  recommendations: PropTypes.arrayOf(
+    PropTypes.shape({
+    }),
+  ).isRequired,
 };
