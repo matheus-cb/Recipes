@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { apiDrinkPerId, apiMealPerId } from '../services/APIdeReceitas';
+import {
+  apiDrinkPerId, apiMealPerId, apiDrinks, apiMeals,
+} from '../services/APIdeReceitas';
+// import Recommendation from '../components/Recommendations';
 
 export default function RecipeDetails(props) {
   const {
@@ -16,6 +19,7 @@ export default function RecipeDetails(props) {
   const [instruction, setInstruction] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [linkYT, setLink] = useState('');
+  const [recommendations, setRecommendations] = useState([]); // Estado para gurdar o valor de recomendação
 
   const getIngredients = (obj) => { // Monta a lista com os Ingredientes
     const chaves = Object.entries(obj);
@@ -37,6 +41,10 @@ export default function RecipeDetails(props) {
     const end = link.split('=');
     setLink(end[1]);
   };
+
+  // Números para utilizar nas funções que precisam de num
+  const numeroDoze = 12;
+  const numSeis = 6;
 
   useEffect(() => { // Chamadas da API
     async function getMeal() {
@@ -69,9 +77,18 @@ export default function RecipeDetails(props) {
       setInstruction(strInstructions);
       getIngredients(drink.drinks[0]);
     }
-    if (url.includes('meal')) getMeal();
-    if (url.includes('drink')) getDrink();
-  }, [id, url]);
+    async function recommendationsMeals() { // cahama a API do meals, para ultilizar como recomendação
+      const recomendationMeals = await apiMeals(numeroDoze);
+      setRecommendations(recomendationMeals.slice(0, numSeis));
+    }
+    async function recommendationsDrinks() { // cahama a API do meals, para ultilizar como recomendação
+      const recomendationMeals = await apiDrinks(numeroDoze);
+      setRecommendations(recomendationMeals.slice(0, numSeis));
+    }
+    if (url.includes('meal')) getMeal(); recommendationsDrinks();
+    if (url.includes('drink')) getDrink(); recommendationsMeals();
+    console.log(recommendations);
+  }, [id, url, recommendations]);
 
   const ingredientsList = ingredients.map((ingredient) => { // Monta a lista de Ingredientes
     const ingNum = ingredient[0];
@@ -125,6 +142,7 @@ export default function RecipeDetails(props) {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;
         picture-in-picture; web-share"
       />
+      {/* <Recommendation type={ url.includes('meals') ? 'drinks' : 'meals' } /> */}
     </div>
   );
 }
