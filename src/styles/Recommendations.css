@@ -1,0 +1,17 @@
+.carousel-container {
+  display: flex;
+  overflow-x: scroll;
+  width: 600px;
+}
+
+.carousel-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 10px;
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  margin-right: 10px;
+  width: 300px;
+}

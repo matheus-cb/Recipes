@@ -13,7 +13,7 @@ export default function Recipes({ receitas = [], tipoReceita }) {
   const { resultReceitas, setResultReceitas } = useContext(RecipesContext);
 
   useEffect(() => {
-    if (!receitas) {
+    if (!receitas || receitas.length === 0) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     } else if (receitas.length === 1) {
       const url = `${location}/${receitas[0].idMeal || receitas[0].idDrink}`;
@@ -29,6 +29,7 @@ export default function Recipes({ receitas = [], tipoReceita }) {
     } if (tipoReceita === 'drinks') {
       return `/drinks/${(receita.idDrink)}`;
     }
+    return '/';
   };
 
   return (
