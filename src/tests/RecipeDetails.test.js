@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../renderWithRouter';
@@ -10,58 +10,86 @@ const local = '/meals/52977';
 // drinks: { 178319: [] },
 // };
 
-// const savedFavorites = {
-// id: '15997',
-// type: 'drink',
-// nationality: '',
-// category: 'Ordinary Drinks',
-// alcoholicOrNot: 'Optional alcohol',
-// name: 'GG',
-// image: 'https://www.thecocktaildb.com/images/media/drink/vyxwut1468875960.jpg',
-// };
+const savedFavoritesMeals = [{
+  id: '15997',
+  type: 'meal',
+  nationality: 'Turkish',
+  category: 'Side',
+  alcoholicOrNot: '',
+  name: 'Corba',
+  image: 'https://www.themealdb.com/images/media/meals/58oia61564916529.jpg',
+}];
+
+const savedFavoritesDrinks = [{
+  id: '15997',
+  type: 'drink',
+  nationality: '',
+  category: 'Ordinary Drinks',
+  alcoholicOrNot: 'Optional alcohol',
+  name: 'GG',
+  image: 'https://www.thecocktaildb.com/images/media/drink/vyxwut1468875960.jpg',
+}];
 
 describe('Testando a pagina de RecipeDetails', () => {
-  beforeEach(() => {
-    Object.defineProperty(window, 'localStorage', {
-      value: {
-        getItem: jest.fn(() => null),
-        setItem: jest.fn(() => null),
-      },
-      writable: true,
-    });
-  });
-  beforeEach(() => {
-    navigator.clipboard = {
-      writeText: jest.fn(),
-    };
-  });
   test('Testa o Botao de favoritar na rota de Meals', async () => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(savedFavoritesMeals));
     const initialEntries = [local];
     renderWithRouter(<App />, { initialEntries });
 
-    const btnFavorite = screen.getByRole('img', { name: /botao favoritar/i });
+    const btnFavorite = await screen.findByRole('img', { name: /botao favoritar/i });
     userEvent.click(btnFavorite);
-
-    expect(window.localStorage.getItem).toHaveBeenCalledTimes(4);
-    expect(window.localStorage.setItem).toHaveBeenCalledTimes(2);
   });
   test('Testa o Botao de favoritar na rota de Drinks', async () => {
+    localStorage.setItem('favoriteRecipes', JSON.stringify(savedFavoritesDrinks));
     const initialEntries = ['/drinks/15997'];
     renderWithRouter(<App />, { initialEntries });
 
-    const btnFavorite = screen.getByRole('img', { name: /botao favoritar/i });
+    const btnFavorite = await screen.findByRole('img', { name: /botao favoritar/i });
     userEvent.click(btnFavorite);
-
-    expect(window.localStorage.getItem).toHaveBeenCalledTimes(4);
-    expect(window.localStorage.setItem).toHaveBeenCalledTimes(2);
-    expect(window.localStorage.setItem).toHaveBeenCalledWith(
-      'inProgressRecipes',
-      '{"meals":{"52771":[]},"drinks":{"178319":[]}}',
-    );
+    expect(btnFavorite.src.includes('whiteHeartIcon')).toBe(true);
+    act(() => {
+      userEvent.click(btnFavorite);
+    });
+    console.log(btnFavorite.src);
+    expect(btnFavorite.src.includes('blackHeartIcon')).toBe(true);
   });
   test('Se a renderizaçao da pagina de meals esta correta', () => {
-    const initialEntries = ['/drinks'];
+    const initialEntries = ['/meals/52977'];
     renderWithRouter(<App />, { initialEntries });
+
+    const titleRecipe = screen.getByTestId('recipe-title');
+    expect(titleRecipe).toBeInTheDocument();
+
+    const RecipePhoto = screen.getByTestId('recipe-photo');
+    expect(RecipePhoto).toBeInTheDocument();
+
+    const categoryRecipe = screen.getByTestId('recipe-category');
+    expect(categoryRecipe).toBeInTheDocument();
+
+    const instructionsRecipe = screen.getByTestId('instructions');
+    expect(instructionsRecipe).toBeInTheDocument();
+
+    const videoRecipe = screen.getByTitle(/youtube video player/i);
+    expect(videoRecipe).toBeInTheDocument();
+  });
+  test('Se a renderizaçao da pagina de drinks esta correta', () => {
+    const initialEntries = ['/drinks/15997'];
+    renderWithRouter(<App />, { initialEntries });
+
+    const titleRecipe = screen.getByTestId('recipe-title');
+    expect(titleRecipe).toBeInTheDocument();
+
+    const RecipePhoto = screen.getByTestId('recipe-photo');
+    expect(RecipePhoto).toBeInTheDocument();
+
+    const categoryRecipe = screen.getByTestId('recipe-category');
+    expect(categoryRecipe).toBeInTheDocument();
+
+    const instructionsRecipe = screen.getByTestId('instructions');
+    expect(instructionsRecipe).toBeInTheDocument();
+
+    const videoRecipe = screen.getByTitle(/youtube video player/i);
+    expect(videoRecipe).toBeInTheDocument();
   });
 
   test('Verifica se ao clicar no botao Start Recipe e redirecionado para a tela de RecipeInProgress', async () => {
@@ -88,5 +116,21 @@ describe('Testando a pagina de RecipeDetails', () => {
     expect(linkCopied).toBeInTheDocument();
     expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('http://localhost:3000/meals/52977');
+  });
+  test('Testa o Botao de favoritar na rota de Drink', async () => {
+    // localStorage.setItem('favoriteRecipes', JSON.stringify(savedFavoritesMeals));
+    const initialEntries = [local];
+    renderWithRouter(<App />, { initialEntries });
+
+    await screen.findByRole('heading', { name: /corba/i });
+
+    const btnFavorite = await screen.getByTestId('favorite-btn');
+    expect(btnFavorite.src.includes('whiteHeartIcon')).toBe(true);
+    act(() => {
+      userEvent.click(btnFavorite);
+    });
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    console.log(btnFavorite.src);
+    expect(btnFavorite.src.includes('blackHeartIcon')).toBe(true);
   });
 });

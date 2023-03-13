@@ -67,7 +67,6 @@ export default function RecipeDetails(props) {
     } else {
       if (mealOrDrink === 'meal') {
         savedFavorites.push(await getMealsDetails(id, mealOrDrink, category));
-        console.log(savedFavorites);
       } else if (mealOrDrink === 'drink') {
         savedFavorites.push(await getDrinksDetails(id, mealOrDrink));
       }
@@ -178,13 +177,10 @@ export default function RecipeDetails(props) {
       </button>
       { linkcopy === true ? <p>Link copied!</p> : ''}
       <button
-        data-testid="favorite-btn"
         onClick={ favorite }
-        src={
-          favorited ? blackHeart : whiteHeart
-        }
       >
         <img
+          data-testid="favorite-btn"
           src={
             favorited ? blackHeart : whiteHeart
           }
