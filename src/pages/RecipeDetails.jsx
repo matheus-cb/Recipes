@@ -25,11 +25,10 @@ export default function RecipeDetails(props) {
 
   const getIngredients = (obj) => { // Monta a lista com os Ingredientes
     const chaves = Object.entries(obj);
-    // console.log(chaves);
+    console.log(chaves);
     const allIngredients = chaves.filter((element) => element[0].includes('Ingredient')
       && ((element[1] !== '') && (element[1] !== null)));
-    const allMeasures = chaves.filter((element) => element[0].includes('Measure')
-      && ((element[1] !== '') && (element[1] !== null)));
+    const allMeasures = chaves.filter((element) => element[0].includes('Measure'));
     // console.log(allIngredients);
     // console.log(allMeasures);
     for (let index = 0; index < allIngredients.length; index += 1) {
@@ -38,16 +37,13 @@ export default function RecipeDetails(props) {
     }
     setIngredients(allIngredients);
   };
-
   const getLink = (link) => { // Pega o Index do Youtube
     const end = link.split('=');
     setLink(end[1]);
   };
-
   // Números para utilizar nas funções que precisam de num
   const numeroDoze = 12;
   const numSeis = 6;
-
   useEffect(() => { // Chamadas da API
     async function getMeal() {
       const meal = await apiMealPerId(id);
@@ -99,8 +95,8 @@ export default function RecipeDetails(props) {
     }
   }, [id, url]);
   console.log('RecipeDetails', url);
-  console.log('RecipeDetails', id);
-  console.log('RecipeDetails', recommendations);
+  // console.log('RecipeDetails', id);
+  // console.log('RecipeDetails', recommendations);
 
   const ingredientsList = ingredients.map((ingredient) => { // Monta a lista de Ingredientes
     const ingNum = ingredient[0];
