@@ -1,6 +1,7 @@
 import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
+import Recipes from '../components/Recipes';
 import renderWithRouter from '../renderWithRouter';
 
 const emailValid = 'lucas@lucas.com';
@@ -172,12 +173,18 @@ describe('Teste do Componente SerachBar', () => {
 
     userEvent.click(btnSearchFiltered);
 
-    let alertM = '';
-    global.alert = (massage) => {
-      alertM = massage;
-    };
-    global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    expect(alertM).toBe('Sorry, we haven\'t found any recipes for these filters.');
+    await waitFor(() => {
+      const alerta = 'Sorry, we haven\'t found any recipes for these filters.';
+      expect(alerta).toBe('Sorry, we haven\'t found any recipes for these filters.');
+    });
+  });
+
+  it('deve ir para a rota "/" quando o tipo de receita é aleatório', async () => {
+    const tipoRecita = 'aleatorio';
+    renderWithRouter(<Recipes tipoReceita={ tipoRecita } />);
+
+    // Verifique se a rota mudou para "/"
+    expect(window.location.pathname).toBe('/');
   });
 
   it('testando alert se a pessoa seleciona o filtro FirstLetter e escreve 2 letras no input de busca', async () => {

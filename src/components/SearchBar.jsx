@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
+
 import { useLocation } from 'react-router-dom';
 import RecipesContext from '../context/RecipesContext';
 
@@ -24,21 +25,19 @@ export default function SearchBar() {
   const urlNameDrinks = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${search}`;
   const urlFirstDrinks = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${search}`;
 
-  const apiRadioButtons = async (url) => {
-    // console.log(location);
+  const apiRadioButtons = useCallback(async (url) => {
     const response = await fetch(url);
-    // console.log(response);
     const data = await response.json();
-    // console.log(data);
     const mealsOrDrinks = data;
 
     if (changeType === 'FirstLetter' && search.length !== 1) {
       global.alert('Your search must have only 1 (one) character');
-    } // pode ser que falte um return aki
-    return mealsOrDrinks;
-  };
+    }
 
-  const radioButtonsMeals = async (button) => {
+    return mealsOrDrinks;
+  }, [changeType, search]);
+
+  const radioButtonsMeals = useCallback(async (button) => {
     let salvaValorMeals = [];
     switch (button) {
     case 'Ingredient':
@@ -60,8 +59,9 @@ export default function SearchBar() {
       console.log('default');
       break;
     }
-  };
-  const radioButtonsDrinks = async (button) => {
+  }, [urlIngredient, urlName, urlFirst, setMeals, apiRadioButtons]);
+
+  const radioButtonsDrinks = useCallback(async (button) => {
     let salvaValorDrinks = [];
     switch (button) {
     case 'Ingredient':
@@ -80,7 +80,7 @@ export default function SearchBar() {
       console.log('default drinks');
       break;
     }
-  };
+  }, [urlIngredientDrinks, urlNameDrinks, urlFirstDrinks, setDrinks, apiRadioButtons]);
 
   useEffect(() => {
     if (location === '/meals') {
@@ -88,7 +88,7 @@ export default function SearchBar() {
     } else {
       radioButtonsDrinks(type);
     }
-  }, [type]);
+  }, [type, location, radioButtonsMeals, radioButtonsDrinks]);
 
   return (
     <div>

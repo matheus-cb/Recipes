@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation, useHistory } from 'react-router-dom';
-import { apiDrinkPerId, apiMealPerId } from '../services/APIdeReceitas';
-import blackHeart from '../images/blackHeartIcon.svg';
-import whiteHeart from '../images/whiteHeartIcon.svg';
-import '../components/componentsCSS/RecipeDetails.css';
+import {
+  apiDrinkPerId, apiMealPerId, apiDrinks, apiMeals,
+} from '../services/APIdeReceitas';
+import Recommendations from '../components/Recommendations';
+// import Recommendation from '../components/Recommendations';
 
 export default function RecipeDetails(props) {
   const {
@@ -14,57 +14,36 @@ export default function RecipeDetails(props) {
     },
   } = props; // Recenbendo ID e o URL
 
-  const [linkcopy, setLinkcopy] = useState(false);
-  const [favorited, setFavorited] = useState(false);
   const [photo, setPhoto] = useState(''); // Estado Local para as Infos da Page
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [instruction, setInstruction] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [linkYT, setLink] = useState('');
-  console.log(favorited);
-
-  const history = useHistory();
-  const { pathname } = useLocation();
-
-  const linkCopied = () => {
-    setLinkcopy(true);
-    navigator.clipboard.writeText(`http://localhost:3000${pathname}`);
-  };
-
-  const startRecipe = () => {
-    history.push(`${pathname}/in-progress`);
-  };
-
-  const favorite = () => {
-    if (favorited === false) {
-      setFavorited(true);
-    } else {
-      setFavorited(false);
-    }
-  };
+  // Estado para gurdar o valor de recomendação e é passado como props para o componente Recommendations
+  const [recommendations, setRecommendations] = useState([]);
 
   const getIngredients = (obj) => { // Monta a lista com os Ingredientes
     const chaves = Object.entries(obj);
     console.log(chaves);
     const allIngredients = chaves.filter((element) => element[0].includes('Ingredient')
       && ((element[1] !== '') && (element[1] !== null)));
-    const allMeasures = chaves.filter((element) => element[0].includes('Measure')
-      && ((element[1] !== '') && (element[1] !== null)));
-    console.log(allIngredients);
-    console.log(allMeasures);
+    const allMeasures = chaves.filter((element) => element[0].includes('Measure'));
+    // console.log(allIngredients);
+    // console.log(allMeasures);
     for (let index = 0; index < allIngredients.length; index += 1) {
       allIngredients[index].push(allMeasures[index][1]);
       allIngredients[index].push(index);
     }
     setIngredients(allIngredients);
   };
-
   const getLink = (link) => { // Pega o Index do Youtube
     const end = link.split('=');
     setLink(end[1]);
   };
-
+  // Números para utilizar nas funções que precisam de num
+  const numeroDoze = 12;
+  const numSeis = 6;
   useEffect(() => { // Chamadas da API
     async function getMeal() {
       const meal = await apiMealPerId(id);
@@ -96,9 +75,28 @@ export default function RecipeDetails(props) {
       setInstruction(strInstructions);
       getIngredients(drink.drinks[0]);
     }
-    if (url.includes('meal')) getMeal();
-    if (url.includes('drink')) getDrink();
+    async function recommendationsMeals() { // cahama a API do meals, para ultilizar como recomendação
+      const recomendationMeals = await apiMeals(numeroDoze);
+      setRecommendations(recomendationMeals.slice(0, numSeis));
+    }
+    async function recommendationsDrinks() { // cahama a API do meals, para ultilizar como recomendação
+      const recomendationDrinks = await apiDrinks(numeroDoze);
+      setRecommendations(recomendationDrinks.slice(0, numSeis));
+    }
+
+    if (url.includes('meal')) {
+      getMeal();
+      recommendationsDrinks();
+    }
+
+    if (url.includes('drink')) {
+      getDrink();
+      recommendationsMeals();
+    }
   }, [id, url]);
+  console.log('RecipeDetails', url);
+  // console.log('RecipeDetails', id);
+  // console.log('RecipeDetails', recommendations);
 
   const ingredientsList = ingredients.map((ingredient) => { // Monta a lista de Ingredientes
     const ingNum = ingredient[0];
@@ -135,27 +133,6 @@ export default function RecipeDetails(props) {
       >
         { category }
       </h2>
-      <button
-        data-testid="share-btn"
-        onClick={ linkCopied }
-      >
-        Compartilhar
-      </button>
-      { linkcopy === true ? <p>Link copied!</p> : ''}
-      <button
-        data-testid="favorite-btn"
-        onClick={ favorite }
-        src={
-          favorited ? blackHeart : whiteHeart
-        }
-      >
-        <img
-          src={
-            favorited ? blackHeart : whiteHeart
-          }
-          alt="Botao favoritar"
-        />
-      </button>
       <p
         data-testid="instructions"
       >
@@ -173,15 +150,7 @@ export default function RecipeDetails(props) {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;
         picture-in-picture; web-share"
       />
-      <div>
-        <button
-          data-testid="start-recipe-btn"
-          className="buttonRecipe"
-          onClick={ startRecipe }
-        >
-          Start Recipe
-        </button>
-      </div>
+      <Recommendations recommendations={ recommendations } />
     </div>
   );
 }

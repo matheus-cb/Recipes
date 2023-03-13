@@ -30,7 +30,7 @@ describe('Testa o componente Profile', () => {
     expect(emailUser).toBeInTheDocument();
 
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(6);
+    expect(buttons).toHaveLength(7);
 
     const doneRecipesBtn = screen.getByTestId('profile-done-btn');
     expect(doneRecipesBtn).toBeInTheDocument();
