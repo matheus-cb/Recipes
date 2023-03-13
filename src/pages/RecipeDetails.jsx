@@ -3,15 +3,12 @@ import PropTypes from 'prop-types';
 import { useLocation, useHistory } from 'react-router-dom';
 import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
-import '../components/componentsCSS/RecipeDetails.css';
+import '../styles/RecipeDetails.css';
 import { getDrinksDetails, getMealsDetails, getFavorites } from '../services/Favorite';
 import isInProgress from '../services/RecipeInProgress';
-import {
-  apiDrinkPerId, apiMealPerId, apiDrinks, apiMeals,
-} from '../services/APIdeReceitas';
+import { apiDrinkPerId, apiMealPerId, apiDrinks, apiMeals }
+  from '../services/APIdeReceitas';
 import Recommendations from '../components/Recommendations';
-// import Recommendation from '../components/Recommendations';
-
 
 export default function RecipeDetails(props) {
   const {
@@ -21,16 +18,15 @@ export default function RecipeDetails(props) {
     },
   } = props; // Recenbendo ID e o URL
 
+  const [linkcopy, setLinkcopy] = useState(false);
+  const [favorited, setFavorited] = useState(false);
   const [photo, setPhoto] = useState(''); // Estado Local para as Infos da Page
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [instruction, setInstruction] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [linkYT, setLink] = useState('');
-  
-  // Estado para gurdar o valor de recomendação e é passado como props para o componente Recommendations
   const [recommendations, setRecommendations] = useState([]);
-
   const [inProgressRecipe, setInProgressRecipe] = useState(false);
 
   const history = useHistory();
@@ -90,8 +86,6 @@ export default function RecipeDetails(props) {
     const allIngredients = chaves.filter((element) => element[0].includes('Ingredient')
       && ((element[1] !== '') && (element[1] !== null)));
     const allMeasures = chaves.filter((element) => element[0].includes('Measure'));
-    // console.log(allIngredients);
-    // console.log(allMeasures);
     for (let index = 0; index < allIngredients.length; index += 1) {
       allIngredients[index].push(allMeasures[index][1]);
       allIngredients[index].push(index);
