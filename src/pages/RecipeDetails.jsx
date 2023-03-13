@@ -5,6 +5,8 @@ import { apiDrinkPerId, apiMealPerId } from '../services/APIdeReceitas';
 import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import '../components/componentsCSS/RecipeDetails.css';
+import { getDrinksDetails, getMealsDetails, getFavorites } from '../services/Favorite';
+import isInProgress from '../services/RecipeInProgress';
 
 export default function RecipeDetails(props) {
   const {
@@ -22,10 +24,13 @@ export default function RecipeDetails(props) {
   const [instruction, setInstruction] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [linkYT, setLink] = useState('');
-  console.log(favorited);
+  const [inProgressRecipe, setInProgressRecipe] = useState(false);
 
   const history = useHistory();
   const { pathname } = useLocation();
+  const numberOne = -1;
+  const mealOrDrink = pathname.split('/')[1].slice(0, numberOne);
+  console.log(mealOrDrink);
 
   const linkCopied = () => {
     setLinkcopy(true);
@@ -35,13 +40,42 @@ export default function RecipeDetails(props) {
   const startRecipe = () => {
     history.push(`${pathname}/in-progress`);
   };
+  const isFavorite = (savedFavorites) => savedFavorites.find((e) => e.id === id); // service
 
-  const favorite = () => {
-    if (favorited === false) {
+  useEffect(() => {
+    if (isInProgress(mealOrDrink, id)) {
+      console.log(isInProgress(mealOrDrink, id));
+      setInProgressRecipe(true);
+    }
+    console.log(isInProgress());
+  }, []);
+
+  useEffect(() => {
+    const savedFavorites = getFavorites();
+    if (isFavorite(savedFavorites)) {
       setFavorited(true);
     } else {
       setFavorited(false);
     }
+  }, []);
+
+  const favorite = async () => {
+    let savedFavorites = getFavorites();
+    if (isFavorite(savedFavorites)) {
+      setFavorited(false);
+      savedFavorites = savedFavorites.filter((e) => e.id !== id);
+    } else {
+      if (mealOrDrink === 'meal') {
+        savedFavorites.push(await getMealsDetails(id, mealOrDrink, category));
+        console.log(savedFavorites);
+      } else if (mealOrDrink === 'drink') {
+        savedFavorites.push(await getDrinksDetails(id, mealOrDrink));
+      }
+      setFavorited(true);
+    }
+    localStorage.setItem('favoriteRecipes', JSON.stringify(
+      savedFavorites,
+    ));
   };
 
   const getIngredients = (obj) => { // Monta a lista com os Ingredientes
@@ -51,8 +85,8 @@ export default function RecipeDetails(props) {
       && ((element[1] !== '') && (element[1] !== null)));
     const allMeasures = chaves.filter((element) => element[0].includes('Measure')
       && ((element[1] !== '') && (element[1] !== null)));
-    console.log(allIngredients);
-    console.log(allMeasures);
+    // console.log(allIngredients);
+    // console.log(allMeasures);
     for (let index = 0; index < allIngredients.length; index += 1) {
       allIngredients[index].push(allMeasures[index][1]);
       allIngredients[index].push(index);
@@ -84,6 +118,7 @@ export default function RecipeDetails(props) {
     }
     async function getDrink() {
       const drink = await apiDrinkPerId(id);
+      console.log(drink);
       const {
         strDrinkThumb,
         strDrink,
@@ -179,7 +214,7 @@ export default function RecipeDetails(props) {
           className="buttonRecipe"
           onClick={ startRecipe }
         >
-          Start Recipe
+          { inProgressRecipe ? 'Continue Recipe' : 'Start Recipe'}
         </button>
       </div>
     </div>
