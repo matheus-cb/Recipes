@@ -1,4 +1,4 @@
-import { screen, waitFor, act, render } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import Recipes from '../components/Recipes';
