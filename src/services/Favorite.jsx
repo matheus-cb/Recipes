@@ -3,7 +3,7 @@ import { apiDrinkPerId, apiMealPerId } from './APIdeReceitas';
 const getFavorites = () => {
   const savedFavorites = JSON.parse(localStorage.getItem('favoriteRecipes')) === null
     ? [] : JSON.parse(localStorage.getItem('favoriteRecipes'));
-  console.log(savedFavorites);
+  // console.log(savedFavorites);
   return savedFavorites;
 };
 

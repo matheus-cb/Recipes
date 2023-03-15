@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DoneRecipesCard from '../components/DoneRecipesCard';
+import Header from '../components/Header';
 
 // const mock = [{
 //   alcoholicOrNot: '',
@@ -38,6 +39,7 @@ export default function DoneRecipes() {
 
   return (
     <>
+      <Header title="Done Recipes" searchOn={ false } />
       <div>DoneRecipes</div>
       <div name="done-recipe">
 
