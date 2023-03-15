@@ -14,7 +14,7 @@ describe('Componente Header', () => {
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent('title');
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(2);
+    expect(buttons).toHaveLength(3);
   });
 
   test('verifica se o botão de perfil redireciona para a página de perfil', () => {

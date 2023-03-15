@@ -5,7 +5,7 @@ import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import '../styles/RecipeDetails.css';
 import { getDrinksDetails, getMealsDetails, getFavorites } from '../services/Favorite';
-import isInProgress from '../services/RecipeInProgress';
+import isInProgress from '../services/API_RecipeInProgress';
 import { apiDrinkPerId, apiMealPerId, apiDrinks, apiMeals }
   from '../services/APIdeReceitas';
 import Recommendations from '../components/Recommendations';
@@ -33,7 +33,7 @@ export default function RecipeDetails(props) {
   const { pathname } = useLocation();
   const numberOne = -1;
   const mealOrDrink = pathname.split('/')[1].slice(0, numberOne);
-  console.log(mealOrDrink);
+  // console.log('mealOrDrink', mealOrDrink);
 
   const linkCopied = () => {
     setLinkcopy(true);
@@ -47,10 +47,10 @@ export default function RecipeDetails(props) {
 
   useEffect(() => {
     if (isInProgress(mealOrDrink, id)) {
-      console.log(isInProgress(mealOrDrink, id));
+      // console.log(isInProgress(mealOrDrink, id));
       setInProgressRecipe(true);
     }
-    console.log(isInProgress());
+    // console.log(isInProgress());
   }, []);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function RecipeDetails(props) {
 
   const getIngredients = (obj) => { // Monta a lista com os Ingredientes
     const chaves = Object.entries(obj);
-    console.log(chaves);
+    // console.log(chaves);
     const allIngredients = chaves.filter((element) => element[0].includes('Ingredient')
       && ((element[1] !== '') && (element[1] !== null)));
     const allMeasures = chaves.filter((element) => element[0].includes('Measure'));
@@ -150,7 +150,7 @@ export default function RecipeDetails(props) {
       recommendationsMeals();
     }
   }, [id, url]);
-  console.log('RecipeDetails', url);
+  // console.log('RecipeDetails', url);
   // console.log('RecipeDetails', id);
   // console.log('RecipeDetails', recommendations);
 
