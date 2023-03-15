@@ -5,7 +5,7 @@ import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import '../styles/RecipeDetails.css';
 import { getDrinksDetails, getMealsDetails, getFavorites } from '../services/Favorite';
-import isInProgress from '../services/RecipeInProgress';
+import isInProgress from '../services/API_RecipeInProgress';
 import { apiDrinkPerId, apiMealPerId, apiDrinks, apiMeals }
   from '../services/APIdeReceitas';
 import Recommendations from '../components/Recommendations';
